@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/assets/favicon.ico">
+
+    <title>NameMachine - Generate realistically random names.</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<!-- Begin page content -->
+<div class="container">
+    <div class="page-header">
+        <h1>Name Machine</h1>
+    </div>
+    <p class="lead">Let me generate some random names for you.</p>
+
+    <form class="form-inline">
+        <div class="form-group">
+            <label>Number of names:</label>
+            <input type="number" min="0" max="1000" name="count" value="100" class="form-control" data-bind="value: count"/>
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label>
+            <select name="gender" class="form-control" data-bind="value: gender">
+                <option value="all">Male & Female</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary" data-bind="click: getNames">Generate <span data-bind="visible: gotNames">More</span> Names</button>
+        </div>
+    </form>
+
+</div>
+
+    <div class="container" data-bind="visible: gotNames">
+    <h3>Here you are, <span data-bind="text: numNames"></span> names:</h3>
+
+    <ul class="names" data-bind="foreach: names">
+        <li>
+            <span data-bind="text: firstName"></span>
+            <span data-bind="text: lastName"></span>
+        </li>
+    </ul>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted"><a href="http://github.com/ajbrown/NameMachine">View the code on GitHub</a></p>
+    </div>
+</footer>
+
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
+<script>
+    (function() {
+        ko.applyBindings({
+            count: ko.observable(100),
+            gender: ko.observable("all"),
+            names: ko.observableArray([]),
+            numNames: ko.observable(0),
+            gotNames: ko.observable(false),
+            getNames: function() {
+                var me = this;
+                jQuery.getJSON("/api/names/" + this.gender(), { count: this.count() }, function(data) {
+                    ko.utils.arrayPushAll( me.names, data );
+                    me.numNames( me.numNames() + data.length );
+                    me.gotNames( true );
+                });
+            }
+        });
+    })();
+</script>
+</body>
+</html>
