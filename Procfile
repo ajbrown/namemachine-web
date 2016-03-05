@@ -1,1 +1,1 @@
-iweb: build/install/namemachine-web/bin/namemachine-web
+web: build/install/namemachine-web/bin/namemachine-web
