@@ -31,3 +31,13 @@ body {
     margin: 20px 0;
 }
 
+
+p {
+  font-size: 1.15em;
+  margin-bottom: 9px;
+}
+
+ol.names > li {
+  font-family: monospace;
+  font-size: 1.03em;
+}

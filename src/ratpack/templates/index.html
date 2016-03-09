@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+
+    <title>NameMachine: The realstic random name generator.</title>
+    <meta name="description" content="Random name generator which can generate realistically names based on U.S. Census data.">
+    <meta name="kewords" content="generate random names online, generate realistic names">
+    <meta name="author" content="A.J. Brown">
     <link rel="icon" href="/assets/favicon.ico">
 
     <title>NameMachine - Generate realistically random names.</title>
@@ -28,52 +31,107 @@
 <!-- Begin page content -->
 <div class="container">
     <div class="page-header">
-        <h1>Name Machine</h1>
+        <h1>Hi, I'm the Name Machine</h1>
     </div>
     <p class="lead">Let me generate some random names for you.</p>
 
-    <form class="form-inline">
-        <div class="form-group">
-            <label>Number of names:</label>
-            <input type="number" min="0" max="1000" name="count" value="100" class="form-control" data-bind="value: count"/>
-        </div>
+    <p>The names I generate will be very realistic.  I use U.S. Census data to make sure you'll see common names more often.  I'll also make sure you get a realistic portion of male and female names.</p>
 
-        <div class="form-group">
-            <label>Gender</label>
-            <select name="gender" class="form-control" data-bind="value: gender">
+    <p><strong>Developers</strong> can use <a href="https://github.com/ajbrown/NameMachine" title="Random Name Generator">my library</a> directly, or <a href="#modal-api" data-toggle="modal" data-target="#modal-api">get names through my API</a>.</p>
+
+
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <hr/>
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <form class="form-inline">
+            <div class="form-group col-sm-4">
+              <label>Number of names</label>
+              <input type="number" min="0" max="1000" name="count" value="100" class="form-control" data-bind="value: count"/>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label>Gender</label>
+              <select name="gender" class="form-control" data-bind="value: gender">
                 <option value="all">Male & Female</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-            </select>
-        </div>
+              </select>
+            </div>
 
-        <div class="form-group">
-            <button class="btn btn-primary" data-bind="click: getNames">Generate <span data-bind="visible: gotNames">More</span> Names</button>
+            <div class="form-group col-sm-4">
+              <br/>
+              <button class="btn btn-primary btn-block" data-bind="click: getNames">Generate <span data-bind="visible: gotNames">More</span> Names</button>
+            </div>
+          </form>
         </div>
-    </form>
-
+      </div>
+    </div>
+  </div>
 </div>
 
-    <div class="container" data-bind="visible: gotNames">
-    <h3>Here you are, <span data-bind="text: numNames"></span> names:</h3>
-
-    <ul class="names" data-bind="foreach: names">
-        <li>
-            <span data-bind="text: firstName"></span>
-            <span data-bind="text: lastName"></span>
-        </li>
-    </ul>
+<div class="container" data-bind="visible: gotNames">
+  <div class="row">
+       <div class="col-sm-12">
+         <h3>Here are your names: <small><span data-bind="text: numNames"></span> of them.</small></h3>
+         <ol class="names" data-bind="foreach: names">
+           <li class="">
+             <span data-bind="text: firstName"></span> <span data-bind="text: lastName"></span>&#010;
+           </li>
+         </ol>
+      </div>
+  </div>
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-api">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">How To Use The API</h4>
+      </div>
+      <div class="modal-body">
+        <p>The NameMachine REST API can be accessed at
+          <code>https://namemachine.xyz/api</code>.  For now it's free and open
+          to use with no rate limits, but beware that we use a single
+          <a href="https://devcenter.heroku.com/articles/dynos#dynos">Heroku Dyno</a>
+          so your performance my vary.  If it proves to be useful, we will roll
+          out a more scalable API.
+        </p>
+
+        <h3>Example Calls</h3>
+
+        <dl>
+          <dt>Generate 500 names</dt>
+          <dd><code>GET https://namemachine.xyz/api/names/all?count=500</code></dd>
+
+          <dt>Generate 200 names (Female Only)</dt>
+          <dd><code>GET https://namemachine.xyz/api/names/female?count=200</code></dd>
+        </dl>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <footer class="footer">
     <div class="container">
-        <p class="text-muted"><a href="http://github.com/ajbrown/NameMachine">View the code on GitHub</a></p>
+        <p class="text-muted">
+          Developed by <a href="https://ajbrown.org">A.J. Brown</a>.  View the code on <a href="http://github.com/ajbrown/NameMachine">GitHub</a>
+        </p>
     </div>
 </footer>
 
-
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<!-- Latest compiled and minified JavaScript -->
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
 <script>
@@ -94,6 +152,16 @@
             }
         });
     })();
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41882926-2', 'auto');
+  ga('send', 'pageview');
 </script>
 </body>
 </html>
