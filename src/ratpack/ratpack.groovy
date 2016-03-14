@@ -1,3 +1,4 @@
+import groovy.time.TimeCategory
 import org.ajbrown.namemachine.Gender
 import org.ajbrown.namemachine.NameGenerator
 import org.ajbrown.namemachine.NameGeneratorOptions
@@ -15,10 +16,22 @@ ratpack {
     handlers {
 
         get {
+
+            def expires = new Date()
+            use(TimeCategory) {
+                expires = expires + 1.hour
+            }
+            response.headers.add( "Cache-Control", "max-age=3600, must-revalidate" )
+            response.headers.add( "Expires", expires.toGMTString() )
+
             render groovyTemplate("index.html", title: "NameMachine")
         }
 
         get("api/names/:gender") {
+
+            response.headers.add( "Cache-control", "private, max-age=0, no-cache" )
+            response.headers.add( "Expires", "Thu, 01-Jan-2016 18:45:20 GMT")
+
             def count  = request.queryParams.getOrDefault( 'count', "100" ) //TODO no more than 1000 allowed at a time
             def weight = request.queryParams.getOrDefault( 'genderWeight', "${NameGeneratorOptions.DEFAULT_GENDER_WEIGHT}" )
             def gender = Gender.values().find{ it.toString() == pathTokens['gender']?.toUpperCase() }
