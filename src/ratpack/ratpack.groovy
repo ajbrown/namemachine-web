@@ -4,9 +4,13 @@ import org.ajbrown.namemachine.NameGenerator
 import org.ajbrown.namemachine.NameGeneratorOptions
 import ratpack.groovy.template.TextTemplateModule
 
+import java.text.SimpleDateFormat
+
 import static ratpack.groovy.Groovy.ratpack
 import static ratpack.jackson.Jackson.json
 import static ratpack.groovy.Groovy.groovyTemplate
+
+def df = new SimpleDateFormat("dd MMM yyyy kk:mm:ss z", Locale.US)
 
 ratpack {
     bindings {
@@ -22,7 +26,7 @@ ratpack {
                 expires = expires + 1.hour
             }
             response.headers.add( "Cache-Control", "max-age=3600, must-revalidate" )
-            response.headers.add( "Expires", expires.toGMTString() )
+            response.headers.add( "Expires", df.format( expires ) )
 
             render groovyTemplate("index.html", title: "NameMachine")
         }
